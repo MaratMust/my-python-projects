@@ -1,0 +1,136 @@
+import pygame
+from copy import deepcopy
+from random import randint
+
+pygame.init()
+
+HE = 1000
+WE = 1000
+
+cell = 10
+
+run = True
+stop = False
+running = False
+
+W = WE // cell
+H = HE // cell
+
+dop_x = None
+dop_y = None
+
+m = []
+n = []
+
+for z in range(0, H):
+    m.append([])
+    for k in range(0, W):
+        m[z].append(randint(0, 1))
+
+n = deepcopy(m)
+
+screen = pygame.display.set_mode((WE, HE))
+
+while run:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                if stop:
+                    stop = False
+                else:
+                    stop = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            if stop:
+                if pos[0] < 10:
+                    dop_x = 0
+                else:
+                    dop_x = pos[0]//10
+
+                if pos[1] < 10:
+                    dop_y = 0
+                else:
+                    dop_y = pos[1]//10
+
+            if m[dop_y][dop_x] == 0:
+                m[dop_y][dop_x] = 1
+            elif m[dop_y][dop_x] == 1:
+                m[dop_y][dop_x] = 0
+
+        for y in range(0, H):
+            for x in range(0, W):
+                if m[y][x] == 1:
+                    pygame.draw.rect(screen, (0, 255, 0), [x * cell, y * cell, cell, cell])
+                if m[y][x] == 0:
+                    pygame.draw.rect(screen, (0, 0, 0), [x * cell, y * cell, cell, cell])
+
+    if not stop:
+        for i in range(0, H):
+            for j in range(0, W):
+                try:
+                    right = m[i][j + 1]
+                except IndexError:
+                    right = 0
+                try:
+                    left = m[i][j - 1]
+                except IndexError:
+                    left = 0
+                try:
+                    up = m[i - 1][j]
+                except IndexError:
+                    up = 0
+                try:
+                    down = m[i + 1][j]
+                except IndexError:
+                    down = 0
+                try:
+                    ul = m[i - 1][j - 1]
+                except IndexError:
+                    ul = 0
+                try:
+                    ur = m[i - 1][j + 1]
+                except IndexError:
+                    ur = 0
+                try:
+                    dr = m[i + 1][j + 1]
+                except IndexError:
+                    dr = 0
+                try:
+                    dl = m[i + 1][j - 1]
+                except IndexError:
+                    dl = 0
+
+                sam = right + left + up + down + ul + ur + dr + dl
+
+                if m[i][j] == 0:
+                    if sam == 3:
+                        n[i][j] = 1
+                    else:
+                        n[i][j] = 0
+                elif m[i][j] == 1:
+                    if sam == 2:
+                        n[i][j] = 1
+                    elif sam == 3:
+                        n[i][j] = 1
+                    else:
+                        n[i][j] = 0
+        m = deepcopy(n)
+
+        for y in range(0, H):
+            for x in range(0, W):
+                if m[y][x] == 1:
+                    pygame.draw.rect(screen, (0, 255, 0), [x * cell, y * cell, cell, cell])
+                if m[y][x] == 0:
+                    pygame.draw.rect(screen, (0, 0, 0), [x * cell, y * cell, cell, cell])
+
+    for line_x in range(0, WE, cell):
+        pygame.draw.line(screen, (255, 255, 255), [line_x, 0], [line_x, HE], 1)
+    for line_y in range(0, HE, cell):
+        pygame.draw.line(screen, (255, 255, 255), [0, line_y], [WE, line_y], 1)
+
+    pygame.display.update()
+
+pygame.quit()
