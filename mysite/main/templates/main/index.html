@@ -1,0 +1,13 @@
+{% extends 'main/pattern.html' %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block main %}
+    <b>Введите ваше имя</b><br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.name }}<br>
+        <div>{{ form.id }}</div>
+        <span>{{ error }}</span>
+    </form>
+{% endblock %}

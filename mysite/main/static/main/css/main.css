@@ -1,0 +1,46 @@
+body {
+    background: #2c2c2c;
+}
+
+aside {
+    float: top;
+    background: #181818;
+	width: 100%;
+	height: 2vh;
+	padding: 2%;
+	margin-bottom: 2%;
+	color: #fff;
+}
+
+aside a {
+    text-decoration: none;
+    font-size: 50px;
+    position: relative;
+    top: -20px;
+    color: #fff;
+    display: block;
+    transition: transform .6s ease;
+}
+
+aside a:hover {
+    color: #eb5959;
+    transform: scale(1.01);
+}
+
+main {
+    color: #fff;
+    font-size: 50px;
+    text-align: center;
+}
+
+input {
+    width: 20%;
+    height: 3vh;
+    font-size: 30px;
+}
+
+span {
+    background: #FF1E1E;
+    border-radius: 10px;
+    font-size: 40px;
+}
